@@ -4,6 +4,8 @@ using MediPortSOAPI.HttpProcessing;
 using MediPortSOAPI.Logging;
 using MediPortSOAPI.SettingsUtils;
 using MediPortSOAPI.SqlCommands;
+using Microsoft.Data.SqlClient;
+using Serilog;
 
 namespace MediPortSOAPI
 {
@@ -12,33 +14,66 @@ namespace MediPortSOAPI
         private static readonly string _settingsPath = @$"{Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)}\MediPortSOAPI\settings.xml";
         internal static async Task Main()
         {
+            CreateSettingsDirectory();
+            var settings = RetrieveSettings();
+
+            Console.WriteLine($"Loaded settings from: {_settingsPath}");
+
+            var logger = SeriloggerFactory.GetLogger();
+
+            var stackOverflowService = new StackOverflowService(settings.StackOverFlowApiKey, 1000, logger);
+            var tagsData = await stackOverflowService.GetTagsDataAsync();
+            using var connection = SqlConnectionFactory.GetSqlConnection(settings);
+
+            OpenSqlConnection(connection, logger);
+            PopulateTagsTable(connection, tagsData);
+
+            var consoleActionCenter = new ConsoleActionCenter(connection, tagsData, stackOverflowService);
+            RenderAndExecuteActions(consoleActionCenter, logger);
+
+            connection.Close();
+        }
+
+        private static void CreateSettingsDirectory()
+        {
             var parentDirectory = Path.GetDirectoryName(_settingsPath)!;
 
             if (!Directory.Exists(parentDirectory))
             {
-                Directory.CreateDirectory(parentDirectory);               
-            }
+                Directory.CreateDirectory(parentDirectory);
+            }         
+        }
 
+        private static Settings RetrieveSettings()
+        {
             var xmlSettingsRetriever = new XmlSettingsRetriever(_settingsPath);
-            var settings = xmlSettingsRetriever.GetSettings();
+            return xmlSettingsRetriever.GetSettings();
+        }
+        
+        private static void OpenSqlConnection(SqlConnection connection, ILogger logger)
+        {
+            try
+            {
+                connection.Open();
+            }
+            catch (SqlException ex)
+            {
+                logger.Error($"Opening connection failed. {ex.Message}");
+                Console.WriteLine("Opening connection failed.");
+                Environment.Exit(0);
+            }
+        }
 
-            Console.WriteLine($"Loaded settings from: {_settingsPath} ");
-            var logger = SeriloggerFactory.GetLogger();
-
-            var stackOverflowService = new StackOverflowService(settings.StackOverFlowApiKey, 1000, logger);           
-            var tagsData = await stackOverflowService.GetTagsDataAsync();
-            
-            using var connection = SqlConnectionFactory.GetSqlConnection(settings);
-            connection.Open();
-
+        private static void PopulateTagsTable(SqlConnection connection, TagsData tagsData)
+        {
             var populateTableCommand = new PopulateTagsTableCommand(connection);
             populateTableCommand.Execute(tagsData);
-            
-            var consoleActionCenter = new ConsoleActionCenter(connection, tagsData, stackOverflowService);
-            consoleActionCenter.RenderActionList();
+        }
 
+        private static void RenderAndExecuteActions(ConsoleActionCenter consoleActionCenter, ILogger logger)
+        {
             while (true)
-            {             
+            {
                 Console.Write($"Awaiting input: ");
 
                 var input = int.Parse(Console.ReadLine()!);
@@ -50,13 +85,11 @@ namespace MediPortSOAPI
 
                 Console.Clear();
 
-                await consoleActionCenter.Execute(input);
+                consoleActionCenter.Execute(input).Wait();
                 consoleActionCenter.RenderActionList();
 
                 Console.WriteLine();
             }
-
-            connection.Close();
-        }      
+        }
     }
 }

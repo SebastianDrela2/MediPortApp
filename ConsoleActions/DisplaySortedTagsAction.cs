@@ -11,44 +11,25 @@ namespace MediPortSOAPI.ConsoleActions
             _simplifiedTags = simplifiedTags;
         }
 
-        public void DisplaySortedAscendingByName()
+        public void DisplaySortedTags(SortOption sortOption)
         {
-            var tagsSortedByName = _simplifiedTags.OrderBy(x => x.Name);
-
-            foreach(var tag in tagsSortedByName)
+            var simplifedTagsSorted = GetSortedSimplifiedTags(sortOption);
+            
+            foreach (var tag in simplifedTagsSorted)
             {
-                Console.WriteLine($"Name: {tag.Name}, Percentage: {tag.Percentage}");
+                Console.WriteLine($"Name: {tag.Name}, Percentage: {tag.Percentage}%");
             }
         }
 
-        public void DisplaySortedDescendingByName()
+        private IEnumerable<SimplifiedTag> GetSortedSimplifiedTags(SortOption sortOption)
         {
-            var tagsSortedByName = _simplifiedTags.OrderByDescending(x => x.Name);
-
-            foreach (var tag in tagsSortedByName)
+            return sortOption switch
             {
-                Console.WriteLine($"Name: {tag.Name}, Percentage: {tag.Percentage}");
-            }
-        }
-
-        public void DisplaySortedAscendingPercentage()
-        {
-            var tagsSortedByName = _simplifiedTags.OrderBy(x => x.Percentage);
-
-            foreach (var tag in tagsSortedByName)
-            {
-                Console.WriteLine($"Name: {tag.Name}, Percentage: {tag.Percentage}");
-            }
-        }
-
-        public void DisplaySortedDescendingByPercentage()
-        {
-            var tagsSortedByName = _simplifiedTags.OrderByDescending(x => x.Percentage);
-
-            foreach (var tag in tagsSortedByName)
-            {
-                Console.WriteLine($"Name: {tag.Name}, Percentage: {tag.Percentage}");
-            }
+                SortOption.NameAscending => _simplifiedTags.OrderBy(x => x.Name),
+                SortOption.NameDescending => _simplifiedTags.OrderByDescending(x => x.Name),
+                SortOption.PercentageAscending => _simplifiedTags.OrderBy(x => x.Percentage),
+                _ => _simplifiedTags.OrderByDescending(x => x.Percentage)
+            };
         }
     }
 }

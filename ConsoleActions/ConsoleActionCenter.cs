@@ -6,10 +6,10 @@ using Microsoft.Data.SqlClient;
 namespace MediPortSOAPI.ConsoleActions
 {
     internal class ConsoleActionCenter
-    {
-        private readonly SqlConnection _connection;
+    {                       
         private readonly StackOverflowService _stackOverflowService;
-        private readonly Dictionary<int, Func<Task>> _actions;       
+        private readonly Dictionary<int, Func<Task>> _actions;
+        private readonly SqlConnection _connection;
 
         private DisplaySortedTagsAction _displayAction;      
 
@@ -22,10 +22,10 @@ namespace MediPortSOAPI.ConsoleActions
             _actions = new Dictionary<int, Func<Task>>()
             {
                 {0, ResetTagsAsync},
-                {1, () => { _displayAction!.DisplaySortedAscendingByName(); return Task.CompletedTask; }},
-                {2, () => { _displayAction!.DisplaySortedDescendingByName(); return Task.CompletedTask; }},
-                {3, () => { _displayAction!.DisplaySortedAscendingPercentage(); return Task.CompletedTask; }},
-                {4, () => { _displayAction!.DisplaySortedDescendingByPercentage(); return Task.CompletedTask; }}
+                {1, () => { _displayAction!.DisplaySortedTags(SortOption.NameAscending); return Task.CompletedTask; }},
+                {2, () => { _displayAction!.DisplaySortedTags(SortOption.NameDescending); return Task.CompletedTask; }},
+                {3, () => { _displayAction!.DisplaySortedTags(SortOption.PercentageAscending); return Task.CompletedTask; }},
+                {4, () => { _displayAction!.DisplaySortedTags(SortOption.PercentageDescending); return Task.CompletedTask; }}
             };
         }
 

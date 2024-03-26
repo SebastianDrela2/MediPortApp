@@ -13,7 +13,6 @@ namespace MediPortSOAPI.SqlCommands
         
         public void Execute()
         {
-
             var command = new SqlCommand
             {
                 CommandText = @"CREATE TABLE Tags (

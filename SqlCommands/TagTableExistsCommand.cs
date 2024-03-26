@@ -13,7 +13,6 @@ namespace MediPortSOAPI.SqlCommands
 
         public bool Execute()
         {
-
             var command = new SqlCommand
             {
                 CommandText = @"IF EXISTS (SELECT 1 

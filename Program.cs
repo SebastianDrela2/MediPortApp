@@ -15,12 +15,11 @@ namespace MediPortSOAPI
         internal static async Task Main()
         {
             CreateSettingsDirectory();
-            var settings = RetrieveSettings();
-
-            Console.WriteLine($"Loaded settings from: {_settingsPath}");
 
             var logger = SeriloggerFactory.GetLogger();
+            var settings = RetrieveSettings(logger);
 
+            Console.WriteLine($"Loaded settings from: {_settingsPath}");        
             var stackOverflowService = new StackOverflowService(settings.StackOverFlowApiKey, 1000, logger);
             var tagsData = await stackOverflowService.GetTagsDataAsync();
             using var connection = SqlConnectionFactory.GetSqlConnection(settings);
@@ -46,9 +45,9 @@ namespace MediPortSOAPI
             }         
         }
 
-        private static Settings RetrieveSettings()
+        private static Settings RetrieveSettings(ILogger logger)
         {
-            var xmlSettingsRetriever = new XmlSettingsRetriever(_settingsPath);
+            var xmlSettingsRetriever = new XmlSettingsRetriever(_settingsPath, logger);
             return xmlSettingsRetriever.GetSettings();
         }
         

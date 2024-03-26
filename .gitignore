@@ -1,4 +1,7 @@
-[Bb]in/
-[Oo]bj
-[Dd]ebug/
+MediPort.Api/[Bb]in/
+MediPort.Console/[Bb]in/
+MediPort.Api/[Oo]bj/
+MediPort.Console/[Oo]bj/
+MediPort.Api/[Dd]ebug/
+MediPort.Console/[Dd]ebug/
 .vs/

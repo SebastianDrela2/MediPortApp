@@ -53,7 +53,7 @@ namespace MediPortSOAPI.ConsoleActions
         {
             Console.WriteLine();
 
-            Console.WriteLine("Action 0: RefetchTags");
+            Console.WriteLine("Action 0: ResetTags");
             Console.WriteLine("Action 1: DisplaySortedTagsByName");
             Console.WriteLine("Action 2: DisplaySortedTagsByNameDescending");
             Console.WriteLine("Action 3: DisplaySortedTagsByPercentage");

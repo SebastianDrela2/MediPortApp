@@ -27,7 +27,7 @@ namespace MediPortSOAPI.ConsoleActions
 
             _actions = new Dictionary<int, Func<Task>>()
             {
-                {0, ResetTags},
+                {0, ResetTagsAsync},
                 {1, () => { _displayAction.DisplaySortedAscendingByName(); return Task.CompletedTask; }},
                 {2, () => { _displayAction.DisplaySortedDescendingByName(); return Task.CompletedTask; }},
                 {3, () => { _displayAction.DisplaySortedAscendingPercentage(); return Task.CompletedTask; }},
@@ -63,7 +63,7 @@ namespace MediPortSOAPI.ConsoleActions
             Console.WriteLine();
         }
         
-        private async Task ResetTags()
+        private async Task ResetTagsAsync()
         {
             var tagsData = await _stackOverflowService.GetTagsDataAsync();
             _simplifiedTagCalculator = new SimplifiedTagCalculator(tagsData);

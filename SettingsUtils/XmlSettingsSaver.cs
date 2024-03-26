@@ -1,14 +1,17 @@
-﻿using System.Xml.Linq;
+﻿using Serilog;
+using System.Xml.Linq;
 
 namespace MediPortSOAPI.SettingsUtils
 {
     internal class XmlSettingsSaver
     {
         private readonly string _settingsPath;
+        private readonly ILogger _logger;
         
-        public XmlSettingsSaver(string settingsPath)
+        public XmlSettingsSaver(string settingsPath, ILogger logger)
         {
             _settingsPath = settingsPath;
+            _logger = logger;
         }
 
         public void SaveSettings()
@@ -31,7 +34,14 @@ namespace MediPortSOAPI.SettingsUtils
                 element.Value = inputValue;
             }
 
-            initialXml.Save(_settingsPath);
+            try
+            {
+                initialXml.Save(_settingsPath);
+            }
+            catch(IOException ex)
+            {
+                _logger.Error($"Failed saving file. {ex.Message}");
+            }
         }
     }
 }

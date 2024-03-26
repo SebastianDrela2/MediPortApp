@@ -29,6 +29,8 @@ namespace MediPortSOAPI
             PopulateTagsTable(connection, tagsData);
 
             var consoleActionCenter = new ConsoleActionCenter(connection, tagsData, stackOverflowService);
+            consoleActionCenter.RenderActionList();
+
             RenderAndExecuteActions(consoleActionCenter, logger);
 
             connection.Close();

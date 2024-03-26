@@ -6,10 +6,10 @@ using Microsoft.Data.SqlClient;
 namespace MediPortSOAPI.ConsoleActions
 {
     internal class ConsoleActionCenter
-    {                       
-        private readonly StackOverflowService _stackOverflowService;
-        private readonly Dictionary<int, Func<Task>> _actions;
+    {
         private readonly SqlConnection _connection;
+        private readonly StackOverflowService _stackOverflowService;
+        private readonly Dictionary<int, Func<Task>> _actions;       
 
         private DisplaySortedTagsAction _displayAction;      
 

@@ -56,17 +56,25 @@ namespace MediPortSOAPI.HttpProcessing
             using var httpClient = new HttpClient();
 
             var currentPageLink = $"{HttpTagFetchLink}&page={page}&key={_apiKey}";
-            var response = await httpClient.GetAsync(currentPageLink);
 
-            if (response.IsSuccessStatusCode)
-            {              
-                using var responseStream = await response.Content.ReadAsStreamAsync();
-                using var decompressedStream = new GZipStream(responseStream, CompressionMode.Decompress);
-                using var streamReader = new StreamReader(decompressedStream);
+            try
+            {
+                var response = await httpClient.GetAsync(currentPageLink);
 
-                var json = await streamReader.ReadToEndAsync();
+                if (response.IsSuccessStatusCode)
+                {
+                    using var responseStream = await response.Content.ReadAsStreamAsync();
+                    using var decompressedStream = new GZipStream(responseStream, CompressionMode.Decompress);
+                    using var streamReader = new StreamReader(decompressedStream);
 
-                return json;
+                    var json = await streamReader.ReadToEndAsync();
+
+                    return json;
+                }
+            }
+            catch(HttpRequestException ex)
+            {
+                _logger.Error($"Http request failed. {ex.Message}");
             }
 
             _logger.Error($"Page {page} did not get fetched, Most likely provided apikey is invalid or oudated.");

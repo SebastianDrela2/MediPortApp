@@ -11,27 +11,21 @@ namespace MediPortSOAPI.ConsoleActions
         private readonly Dictionary<int, Func<Task>> _actions;
         private readonly SqlConnection _connection;
 
-        private DisplaySortedTagsAction _displayAction;
-        private SimplifiedTagCalculator _simplifiedTagCalculator;
+        private DisplaySortedTagsAction _displayAction;      
 
         public ConsoleActionCenter(SqlConnection connection, TagsData tagsData, StackOverflowService stackOverflowService)
         {
             _connection = connection;
-            _simplifiedTagCalculator = new SimplifiedTagCalculator(tagsData);
             _stackOverflowService = stackOverflowService;
 
-            var simplifiedTags = _simplifiedTagCalculator.GetSimplifiedTags();                                        
-            _displayAction = new DisplaySortedTagsAction(simplifiedTags);
-
-            var repopulateTableCommand = new PopulateTagsTableCommand(connection);
-
+            SetDisplayAction(tagsData);          
             _actions = new Dictionary<int, Func<Task>>()
             {
                 {0, ResetTagsAsync},
-                {1, () => { _displayAction.DisplaySortedAscendingByName(); return Task.CompletedTask; }},
-                {2, () => { _displayAction.DisplaySortedDescendingByName(); return Task.CompletedTask; }},
-                {3, () => { _displayAction.DisplaySortedAscendingPercentage(); return Task.CompletedTask; }},
-                {4, () => { _displayAction.DisplaySortedDescendingByPercentage(); return Task.CompletedTask; }}
+                {1, () => { _displayAction!.DisplaySortedAscendingByName(); return Task.CompletedTask; }},
+                {2, () => { _displayAction!.DisplaySortedDescendingByName(); return Task.CompletedTask; }},
+                {3, () => { _displayAction!.DisplaySortedAscendingPercentage(); return Task.CompletedTask; }},
+                {4, () => { _displayAction!.DisplaySortedDescendingByPercentage(); return Task.CompletedTask; }}
             };
         }
 
@@ -66,10 +60,7 @@ namespace MediPortSOAPI.ConsoleActions
         private async Task ResetTagsAsync()
         {
             var tagsData = await _stackOverflowService.GetTagsDataAsync();
-            _simplifiedTagCalculator = new SimplifiedTagCalculator(tagsData);
-
-            var simplifiedTags = _simplifiedTagCalculator.GetSimplifiedTags();
-            _displayAction = new DisplaySortedTagsAction(simplifiedTags);
+            SetDisplayAction(tagsData);
 
             var deleteTableCommand = new DeleteTagsTableCommand(_connection);
             deleteTableCommand.Execute();
@@ -78,5 +69,12 @@ namespace MediPortSOAPI.ConsoleActions
             populateTableCommand.Execute(tagsData);
         }
 
+        private void SetDisplayAction(TagsData tagsData)
+        {
+            var simplifiedTagCalculator = new SimplifiedTagCalculator(tagsData);
+            var simplifiedTags = simplifiedTagCalculator.GetSimplifiedTags();
+
+            _displayAction = new DisplaySortedTagsAction(simplifiedTags);
+        }
     }
 }

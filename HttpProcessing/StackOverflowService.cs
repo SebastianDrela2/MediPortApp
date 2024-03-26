@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Serilog;
 using System.IO.Compression;
 
 namespace MediPortSOAPI.HttpProcessing
@@ -8,19 +9,21 @@ namespace MediPortSOAPI.HttpProcessing
         private const string HttpTagFetchLink = "https://api.stackexchange.com/2.3/tags?order=desc&min=1000&sort=popular&site=stackoverflow";
 
         private readonly string _apiKey;
-        private readonly int _tagLimit;       
+        private readonly int _tagLimit;
+        private readonly ILogger _logger;
 
-        public StackOverflowService(string apiKey, int tagLimit)
+        public StackOverflowService(string apiKey, int tagLimit, ILogger logger)
         {
             _apiKey = apiKey;
             _tagLimit = tagLimit;
+            _logger = logger;
         }
 
         public async Task<TagsData> GetTagsDataAsync()
         {
             var page = 1;
             var tagsData = new TagsData();
-
+            var endMessage = "Finished processing tags.";
             Console.WriteLine($"Processing tags...");
 
             while (tagsData.Tags.Count <= _tagLimit)
@@ -36,9 +39,14 @@ namespace MediPortSOAPI.HttpProcessing
 
                     page++;                   
                 }
+                else
+                {
+                    endMessage = "Finished processing tags with errors";
+                    break;                    
+                }
             }
 
-            Console.WriteLine($"Finished processing tags.");
+            Console.WriteLine(endMessage);
 
             return tagsData;
         }
@@ -61,6 +69,7 @@ namespace MediPortSOAPI.HttpProcessing
                 return json;
             }
 
+            _logger.Error($"Page {page} did not get fetched, Most likely provided apikey is invalid or oudated.");
             return null;
         }
     }

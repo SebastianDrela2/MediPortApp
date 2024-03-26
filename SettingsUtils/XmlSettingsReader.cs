@@ -12,15 +12,7 @@ namespace MediPortSOAPI.SettingsUtils
         }
 
         public Settings? GetSettings()
-        {
-            var parentDirectory = Path.GetDirectoryName(_settingsPath)!;
-
-            if (!Directory.Exists(parentDirectory))
-            {
-                Directory.CreateDirectory(parentDirectory);
-                return null;
-            }
-
+        {           
             if (!File.Exists(_settingsPath))
             {
                 return null;

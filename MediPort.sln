@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34322.80
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MediPort.API", "MediPort.API\MediPort.API.csproj", "{461C6B4C-899D-4404-B08E-0851B11EE513}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MediPort.Api", "MediPort.Api\MediPort.Api.csproj", "{461C6B4C-899D-4404-B08E-0851B11EE513}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MediPort.Console", "MediPort.Console\MediPort.Console.csproj", "{A1155E74-C94C-4103-8B4D-511DDE5DE8A7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mediport.Api.Tests", "Mediport.Api.Tests\Mediport.Api.Tests.csproj", "{913440A7-C2AD-46F6-9AF8-EA0449F5827C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediPort.Api.Tests", "MediPort.Api.Tests\MediPort.Api.Tests.csproj", "{913440A7-C2AD-46F6-9AF8-EA0449F5827C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

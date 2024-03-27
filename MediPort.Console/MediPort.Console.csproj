@@ -10,7 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MediPort.API\MediPort.API.csproj" />
+    <ProjectReference Include="..\MediPort.Api\MediPort.Api.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,14 +1,24 @@
-﻿# Build Stage
+﻿# Use the .NET SDK image to build the project
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /app
-COPY . ./
-# Restore NuGet packages
-RUN dotnet restore MediPort.Console/MediPort.Console.csproj --disable-parallel
-RUN dotnet restore MediPort.Api/MediPort.API.csproj --disable-parallel
-RUN dotnet publish MediPort.Console/*.csproj -c Release -o out --no-restore
 
-FROM mcr.microsoft.com/dotnet/sdk:6.0
+# Copy the solution file and restore dependencies
+COPY MediPort.sln .
+COPY MediPort.Console ./MediPort.Console/
+COPY MediPort.Api ./MediPort.Api/
+COPY MediPort.Api.Tests ./MediPort.Api.Tests/
+
+RUN dotnet restore
+
+# Publish the application
+RUN dotnet publish MediPort.Console/MediPort.Console.csproj -c Release -o /app/MediPort.Console/out
+
+# Use a smaller runtime image for the final stage
+FROM mcr.microsoft.com/dotnet/runtime:6.0
 WORKDIR /app
+
+# Copy the published output from the build stage to the final stage
 COPY --from=build /app/MediPort.Console/out ./
 
+# Set the entry point for the container
 ENTRYPOINT ["dotnet", "MediPort.Console.dll"]

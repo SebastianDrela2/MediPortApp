@@ -3,7 +3,7 @@ using System.Xml.Linq;
 
 namespace MediPortApi.SettingsUtils
 {
-    internal class XmlSettingsSaver
+    public class XmlSettingsSaver
     {
         private readonly string _settingsPath;
         private readonly ILogger _logger;
@@ -14,31 +14,23 @@ namespace MediPortApi.SettingsUtils
             _logger = logger;
         }
 
-        public void SaveSettings()
+        public void SaveSettings(Settings settings)
         {
             var initialXml = new XDocument(
-             new XElement("Data",
-                 new XElement("ServerName"),
-                 new XElement("DatabaseName"),
-                 new XElement("Username"),
-                 new XElement("Password"),
-                 new XElement("StackOverFlowApiKey")                
-             )
-         );
-
-            foreach (var element in initialXml.Root.Elements())
-            {
-                Console.Write($"Enter {element.Name}: ");
-
-                var inputValue = Console.ReadLine();
-                element.Value = inputValue;
-            }
+            new XElement("Data",
+                new XElement("ServerName", settings.ServerName),
+                new XElement("DatabaseName", settings.DatabaseName),
+                new XElement("Username", settings.UserName),
+                new XElement("Password", settings.Password),
+                new XElement("StackOverFlowApiKey", settings.StackOverFlowApiKey)
+               )
+            );
 
             try
             {
                 initialXml.Save(_settingsPath);
             }
-            catch(IOException ex)
+            catch (IOException ex)
             {
                 _logger.Error($"Failed saving file. {ex.Message}");
             }

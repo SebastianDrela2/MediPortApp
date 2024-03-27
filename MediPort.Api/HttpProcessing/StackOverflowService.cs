@@ -38,9 +38,7 @@ namespace MediPortApi.HttpProcessing
         {
             var page = 1;
             var tagsData = new TagsData();
-            var endMessage = "Finished processing tags.";
-            Console.WriteLine($"Processing tags...");
-
+            
             while (tagsData.Tags.Count <= _tagLimit)
             {                
                 var json = await GetJson(page);
@@ -48,21 +46,15 @@ namespace MediPortApi.HttpProcessing
                 if (json is not null)
                 {
                     var tagsDataReceived = JsonConvert.DeserializeObject<TagsData>(json)!;
-                    tagsData.Tags.AddRange(tagsDataReceived.Tags);
-
-                    Console.WriteLine($"Processed tag page {page}");                    
-
+                    tagsData.Tags.AddRange(tagsDataReceived.Tags);                                    
                     page++;                   
                 }
                 else
-                {
-                    endMessage = "Finished processing tags with errors";
+                {                   
                     break;                    
                 }
             }
-
-            Console.WriteLine(endMessage);
-
+            
             return tagsData;
         }
 
@@ -90,6 +82,7 @@ namespace MediPortApi.HttpProcessing
             catch(HttpRequestException ex)
             {
                 _logger.Error($"Http request failed. {ex.Message}");
+                return null;
             }
 
             _logger.Error($"Page {page} did not get fetched, Most likely provided apikey is invalid or oudated.");

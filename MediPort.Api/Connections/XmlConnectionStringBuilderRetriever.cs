@@ -3,7 +3,7 @@ using Microsoft.Data.SqlClient;
 
 namespace MediPortApi.Connections
 {
-    internal class XmlConnectionStringBuilderRetriever
+    public class XmlConnectionStringBuilderRetriever
     {
         public SqlConnectionStringBuilder GetSqlConnectionStringBuilder(Settings settings)
         {

@@ -16,18 +16,7 @@ namespace MediPortApi.SettingsUtils
         public Settings GetSettings()
         {
             var xmlSettingsReader = new XmlSettingsReader(_settingsPath, _logger);
-            var settings = xmlSettingsReader.GetSettings();
-
-            if (settings is null)
-            {
-                Console.WriteLine($"Provide empty username and password if desired authentication type is a Windows Authentication.");
-
-                var xmlSettingsSaver = new XmlSettingsSaver(_settingsPath , _logger);
-                xmlSettingsSaver.SaveSettings();
-
-                settings = xmlSettingsReader.GetSettings();
-            }
-
+            var settings = xmlSettingsReader.GetSettings();         
             return settings!;
         }
     }

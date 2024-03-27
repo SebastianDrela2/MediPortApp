@@ -4,4 +4,6 @@ MediPort.Api/[Oo]bj/
 MediPort.Console/[Oo]bj/
 MediPort.Api/[Dd]ebug/
 MediPort.Console/[Dd]ebug/
+/Mediport.Api.Tests/bin/Debug/net6.0
+/Mediport.Api.Tests/obj
 .vs/

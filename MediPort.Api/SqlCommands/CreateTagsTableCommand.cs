@@ -2,7 +2,7 @@
 
 namespace MediPortApi.SqlCommands
 {
-    internal class CreateTagsTableCommand
+    public class CreateTagsTableCommand
     {
         private readonly SqlConnection _connection;
 

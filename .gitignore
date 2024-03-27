@@ -7,3 +7,5 @@ MediPort.Console/[Dd]ebug/
 /Mediport.Api.Tests/bin/Debug/net6.0
 /Mediport.Api.Tests/obj
 .vs/
+/Mediport.Api.Tests/bin/Release/net6.0
+/out

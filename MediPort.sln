@@ -7,7 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MediPort.Api", "MediPort.Ap
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MediPort.Console", "MediPort.Console\MediPort.Console.csproj", "{A1155E74-C94C-4103-8B4D-511DDE5DE8A7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediPort.Api.Tests", "MediPort.Api.Tests\MediPort.Api.Tests.csproj", "{913440A7-C2AD-46F6-9AF8-EA0449F5827C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MediPort.Api.Tests", "MediPort.Api.Tests\MediPort.Api.Tests.csproj", "{913440A7-C2AD-46F6-9AF8-EA0449F5827C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediPort.RestApi", "MediPort.RestApi\MediPort.RestApi.csproj", "{62071891-AD9F-40C6-8165-648F5020CD52}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{913440A7-C2AD-46F6-9AF8-EA0449F5827C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{913440A7-C2AD-46F6-9AF8-EA0449F5827C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{913440A7-C2AD-46F6-9AF8-EA0449F5827C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{62071891-AD9F-40C6-8165-648F5020CD52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{62071891-AD9F-40C6-8165-648F5020CD52}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{62071891-AD9F-40C6-8165-648F5020CD52}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{62071891-AD9F-40C6-8165-648F5020CD52}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

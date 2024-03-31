@@ -3,7 +3,7 @@ using Microsoft.Data.SqlClient;
 
 namespace MediPortApi.SqlCommands
 {
-    internal class InsertIntoTagTableCommand
+    public class InsertIntoTagTableCommand
     {
         private readonly SqlConnection _connection;
 

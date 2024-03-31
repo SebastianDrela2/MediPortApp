@@ -1,0 +1,6 @@
+@MediPort.RestApi_HostAddress = http://localhost:5202
+
+GET {{MediPort.RestApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

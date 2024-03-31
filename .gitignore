@@ -1,8 +1,11 @@
 MediPort.Api/[Bb]in/
+MediPort.RestApi/[Bb]in/
 MediPort.Console/[Bb]in/
 MediPort.Api/[Oo]bj/
+MediPort.RestApi/[Oo]bj/
 MediPort.Console/[Oo]bj/
 MediPort.Api/[Dd]ebug/
+MediPort.RestApi/[Dd]ebug/
 MediPort.Console/[Dd]ebug/
 /Mediport.Api.Tests/bin/Debug/net6.0
 /Mediport.Api.Tests/obj

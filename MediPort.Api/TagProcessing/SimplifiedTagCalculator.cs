@@ -5,14 +5,24 @@ namespace MediPortApi.TagProcessing
     public class SimplifiedTagCalculator
     {
         private readonly int _totalTags;
-        private readonly List<Tag> _tags;
+        private readonly IEnumerable<Tag> _tags;
 
-        public SimplifiedTagCalculator(TagsData tagsData)
+        public SimplifiedTagCalculator()
+        {
+
+        }
+
+        public SimplifiedTagCalculator(IEnumerable<Tag> tags)
         {
             var totalTags = 0;
-            _tags = tagsData.Tags;
 
-            _tags.ForEach(x => totalTags += x.Count);
+            _tags = tags;
+
+            foreach (var tag in _tags)
+            {
+                totalTags += tag.Count;
+            }
+            
             _totalTags = totalTags;
 
         }
@@ -30,7 +40,7 @@ namespace MediPortApi.TagProcessing
             };
         }
 
-        private IList<SimplifiedTag> GetSimplifiedTags()
+        public IList<SimplifiedTag> GetSimplifiedTags()
         {
             var simplifiedTagsList = new List<SimplifiedTag>();
             
@@ -43,7 +53,7 @@ namespace MediPortApi.TagProcessing
             return simplifiedTagsList;
         }
 
-        private SimplifiedTag GetSimplifiedTag(Tag tag)
+        public SimplifiedTag GetSimplifiedTag(Tag tag)
         {
             var roundedDivisor = Math.Round(double.Parse(tag.Count.ToString()) / _totalTags, 3);
             var percentage = roundedDivisor * 100;

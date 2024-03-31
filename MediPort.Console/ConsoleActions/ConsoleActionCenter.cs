@@ -59,7 +59,7 @@ namespace MediPortApi.ConsoleActions
              
         private void SetDisplayAction(TagsData tagsData)
         {
-            var simplifiedTagCalculator = new SimplifiedTagCalculator(tagsData);           
+            var simplifiedTagCalculator = new SimplifiedTagCalculator(tagsData.Tags);           
             _displayAction = new DisplaySortedTagsAction(simplifiedTagCalculator);
         }
     }

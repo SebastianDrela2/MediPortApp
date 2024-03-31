@@ -12,7 +12,7 @@ namespace Mediport.Api.Tests
             var limiter = 10;
             var mockTagData = new MockTagData(limiter).GetMockTagsData();
 
-            var calculator = new SimplifiedTagCalculator(mockTagData);
+            var calculator = new SimplifiedTagCalculator(mockTagData.Tags);
             var simplifiedTags = calculator.GetSortedSimplifiedTags(sortOption);
 
             Assert.That(simplifiedTags.First().Name, Is.EqualTo(expected));
@@ -25,7 +25,7 @@ namespace Mediport.Api.Tests
             var limiter = 10;
             var mockTagData = new MockTagData(limiter).GetMockTagsData();
 
-            var calculator = new SimplifiedTagCalculator(mockTagData);
+            var calculator = new SimplifiedTagCalculator(mockTagData.Tags);
             var simplifiedTags = calculator.GetSortedSimplifiedTags(sortOption);
 
             Assert.That(simplifiedTags.First().Percentage, Is.EqualTo(expected));

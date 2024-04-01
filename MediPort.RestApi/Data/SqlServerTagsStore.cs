@@ -14,7 +14,7 @@ namespace MediPort.RestApi.Data
         {
             // lord save me for storing credintials here
 
-            var server = "ms-sql-server";
+            var server = "localhost";
             var database = "master";
             var port = "1433";
             var user = "SA";
@@ -49,6 +49,20 @@ namespace MediPort.RestApi.Data
 
             var stackOverflowService = new StackOverflowService(connection, apiKey, 1000, default);
             await stackOverflowService.ResetTagsAsync();         
+        }
+
+        public async Task<IEnumerable<SimplifiedTag>> GetAllTagsSorted(SortOption sortOption)
+        {
+            await using var connection = new SqlConnection(_connectionString);
+            connection.Open();
+
+            var selectTagsCommand = new SelectTagsFromTableCommand(connection);
+
+            var tags = await Task.Run(() => selectTagsCommand.Execute());
+            var simplifiedTagCalculator = new SimplifiedTagCalculator(tags);
+
+            return await Task.Run(() => simplifiedTagCalculator.GetSortedSimplifiedTags(sortOption));
+
         }
 
         public async Task<IEnumerable<SimplifiedTag>> GetAllTags()
@@ -113,6 +127,6 @@ namespace MediPort.RestApi.Data
             var deleteTagsCommand = new DeleteTagsTableCommand(connection);
             deleteTagsCommand.Execute(id);
 
-        }       
+        }    
     }
 }

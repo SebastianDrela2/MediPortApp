@@ -16,7 +16,7 @@ namespace MediPort.RestApi.Controllers
             _tagsStore = tagsStore;
         }
 
-        [HttpGet("results/{apiKey}")]
+        [HttpGet("config/{apiKey}")]
         public async Task<ActionResult<IEnumerable<SimplifiedTag>>> RefreshAllTags(string apiKey)
         {
             await _tagsStore.RefreshAllTags(apiKey);
@@ -29,7 +29,17 @@ namespace MediPort.RestApi.Controllers
 
             return NoContent();
         }
-        
+
+        [HttpGet("results/{sort}")]
+        public async Task<ActionResult<IEnumerable<SimplifiedTag>>> GetAllSimplifiedTagsSorted(string sort)
+        {
+            var sortOption = GetSortOption(sort);
+            var sortedTagItems = await _tagsStore.GetAllTagsSorted(sortOption);
+
+            return Ok(sortedTagItems);
+        }
+
+
         [HttpGet]
         public async Task<ActionResult <IEnumerable<SimplifiedTag>>> GetAllSimplifiedTags()
         {
@@ -73,6 +83,19 @@ namespace MediPort.RestApi.Controllers
             await _tagsStore.DeleteTag(id);
 
             return NoContent();
+        }
+
+        private SortOption GetSortOption(string value)
+        {
+            value = value.ToLower();
+            return value switch
+            {
+                "nameascending" => SortOption.NameAscending,
+                "namedescending" => SortOption.NameDescending,
+                "percentageascending" => SortOption.PercentageAscending,
+                "percentagedescending" => SortOption.PercentageDescending,
+                _ => throw new ArgumentException($"Invalid sort option: {value}")
+            };
         }
     }
 }

@@ -25,7 +25,7 @@ namespace MediPort.RestApi.Controllers
         }
 
         [HttpGet("results")]
-        public async Task<ActionResult<IEnumerable<SimplifiedTag>>> GetAllSimplifiedTagsSorted(int page = 1, string sort = "nameascending")
+        public async Task<ActionResult<IEnumerable<SimplifiedTag>>> GetSimplifiedTagsSorted(int page = 1, string sort = "nameascending")
         {
             var sortOption = GetSortOption(sort);
             var sortedTagItems = await _tagsStore.GetTagsSorted(page, sortOption);

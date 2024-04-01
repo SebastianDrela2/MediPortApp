@@ -16,38 +16,23 @@ namespace MediPort.RestApi.Controllers
             _tagsStore = tagsStore;
         }
 
-        [HttpGet("config/{apiKey}")]
+        [HttpGet("data/{apiKey}")]
         public async Task<ActionResult<IEnumerable<SimplifiedTag>>> RefreshAllTags(string apiKey)
         {
             await _tagsStore.RefreshAllTags(apiKey);
-            var refreshedSimplifedTags = await GetAllSimplifiedTags();
-
-            if (refreshedSimplifedTags.Result is OkObjectResult okObjectResult)
-            {
-                return Ok(okObjectResult.Value);
-            }
-
+            
             return NoContent();
         }
 
-        [HttpGet("results/{sort}")]
-        public async Task<ActionResult<IEnumerable<SimplifiedTag>>> GetAllSimplifiedTagsSorted(string sort)
+        [HttpGet("results")]
+        public async Task<ActionResult<IEnumerable<SimplifiedTag>>> GetAllSimplifiedTagsSorted(int page = 1, string sort = "nameascending")
         {
             var sortOption = GetSortOption(sort);
-            var sortedTagItems = await _tagsStore.GetAllTagsSorted(sortOption);
+            var sortedTagItems = await _tagsStore.GetTagsSorted(page, sortOption);
 
             return Ok(sortedTagItems);
         }
-
-
-        [HttpGet]
-        public async Task<ActionResult <IEnumerable<SimplifiedTag>>> GetAllSimplifiedTags()
-        {
-            var tagItems = await _tagsStore.GetAllTags();
-
-            return Ok(tagItems);
-        }
-
+        
         [HttpGet("{id}", Name = "GetSimplifiedTagById")]
         public async Task<ActionResult<IEnumerable<SimplifiedTag>>> GetSimplifiedTagById(int id)
         {
@@ -88,12 +73,15 @@ namespace MediPort.RestApi.Controllers
         private SortOption GetSortOption(string value)
         {
             value = value.ToLower();
+
             return value switch
             {
                 "nameascending" => SortOption.NameAscending,
                 "namedescending" => SortOption.NameDescending,
                 "percentageascending" => SortOption.PercentageAscending,
                 "percentagedescending" => SortOption.PercentageDescending,
+                "countascending" => SortOption.CountAscending,
+                "countdescending" => SortOption.CountDescending,
                 _ => throw new ArgumentException($"Invalid sort option: {value}")
             };
         }

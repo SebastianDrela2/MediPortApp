@@ -16,7 +16,7 @@ namespace MediPort.Console
         {
             CreateSettingsDirectory();
 
-            var logger = SeriloggerFactory.GetLogger();
+            var logger = SerilogFactory.GetLogger();
             var settings = RetrieveSettings(logger);
 
             using var connection = SqlConnectionFactory.GetSqlConnection(settings);

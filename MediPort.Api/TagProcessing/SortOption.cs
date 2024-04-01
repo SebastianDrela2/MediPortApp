@@ -6,5 +6,7 @@
         NameDescending,
         PercentageAscending,
         PercentageDescending,
+        CountAscending,
+        CountDescending
     }
 }

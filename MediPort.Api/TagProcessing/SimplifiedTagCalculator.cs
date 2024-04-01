@@ -36,7 +36,9 @@ namespace MediPortApi.TagProcessing
                 SortOption.NameAscending => simplifiedTags.OrderBy(x => x.Name),
                 SortOption.NameDescending => simplifiedTags.OrderByDescending(x => x.Name),
                 SortOption.PercentageAscending => simplifiedTags.OrderBy(x => x.Percentage),
-                _ => simplifiedTags.OrderByDescending(x => x.Percentage)
+                SortOption.PercentageDescending => simplifiedTags.OrderByDescending(x => x.Percentage),
+                SortOption.CountAscending => simplifiedTags.OrderBy(x => x.Count),
+                _ => simplifiedTags.OrderByDescending(x => x.Count)
             };
         }
 
@@ -58,7 +60,7 @@ namespace MediPortApi.TagProcessing
             var roundedDivisor = Math.Round(double.Parse(tag.Count.ToString()) / _totalTags, 3);
             var percentage = roundedDivisor * 100;
 
-            return new SimplifiedTag(tag.Name, percentage);
+            return new SimplifiedTag(tag.Name, tag.Count, percentage);
         }
     }
 }

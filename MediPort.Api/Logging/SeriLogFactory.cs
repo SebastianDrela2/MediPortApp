@@ -2,7 +2,7 @@
 
 namespace MediPortApi.Logging
 {
-    public static class SeriloggerFactory
+    public static class SerilogFactory
     {
         private static readonly string _logPath = @$"{Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)}\MediPortSOAPI\logs.txt";
         private static ILogger _logger;

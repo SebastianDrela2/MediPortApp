@@ -12,38 +12,31 @@ namespace MediPort.Api.SqlCommands
             _connection = connection;
         }
 
-        public IEnumerable<Tag> Execute(int id = -1)
+        public IEnumerable<Tag> Execute(int page)
         {
             IList<Tag> tags = new List<Tag>();
 
             var command = new SqlCommand
             {
-                CommandText = @"SELECT TagName AS [name], 
-TagCount AS [count], 
-HasSynonyms AS [has_synonyms], 
-IsModeratorOnly AS 
-[is_moderator_only], 
-IsRequired AS [is_required] 
-FROM Tags",
+                CommandText = $@"SELECT *
+FROM Tags
+ORDER BY TagID
+OFFSET ({page} - 1) * 30 ROWS
+FETCH NEXT 30 ROWS ONLY;",
                 Connection = _connection
             };
-
-            if (id is not -1)
-            {
-                command.CommandText += $" WHERE TagId = {id}";
-            }
-
+            
             using var reader = command.ExecuteReader();
 
             while (reader.Read())
             {
                 var tag = new Tag
                 {
-                    Name = reader.GetString(reader.GetOrdinal("name")), // assuming name is string
-                    Count = reader.GetInt32(reader.GetOrdinal("count")), // assuming count is int
-                    HasSynonyms = reader.GetBoolean(reader.GetOrdinal("has_synonyms")),
-                    IsModeratorOnly = reader.GetBoolean(reader.GetOrdinal("is_moderator_only")),
-                    IsRequired = reader.GetBoolean(reader.GetOrdinal("is_required"))
+                    Name = reader.GetString(reader.GetOrdinal("TagName")),
+                    Count = reader.GetInt32(reader.GetOrdinal("TagCount")),
+                    HasSynonyms = reader.GetBoolean(reader.GetOrdinal("HasSynonyms")),
+                    IsModeratorOnly = reader.GetBoolean(reader.GetOrdinal("IsModeratorOnly")),
+                    IsRequired = reader.GetBoolean(reader.GetOrdinal("IsRequired"))
                 };
 
                 tags.Add(tag);

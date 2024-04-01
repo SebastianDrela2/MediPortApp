@@ -12,10 +12,10 @@ COPY MediPort.Api.Tests ./MediPort.Api.Tests/
 RUN dotnet restore
 
 # Publish the application
-RUN dotnet publish MediPort.Console/MediPort.Console.csproj -c Release -o /app/MediPort.RestApi/out
+RUN dotnet publish MediPort.RestApi/MediPort.RestApi.csproj -c Release -o /app/MediPort.RestApi/out
 
 # Use a smaller runtime image for the final stage
-FROM mcr.microsoft.com/dotnet/runtime:6.0
+FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app
 
 # Copy the published output from the build stage to the final stage

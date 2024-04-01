@@ -6,9 +6,7 @@ _So I dont forget_
 - Run RestApi to access api endpoints for such tags.
 
 ## Media
-
-![obraz](https://github.com/SebastianDrela2/StackOverFlowTagFetch/assets/107455395/6d39f77d-081f-4b75-8c7c-0e2fe7ff10c1)
-
+![obraz](https://github.com/SebastianDrela2/StackOverFlowTagFetch/assets/107455395/b0150a51-d697-4332-a1c9-ddcfd6800de0)
 
 ### Open Api Doc
 ```

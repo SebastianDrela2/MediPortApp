@@ -7,7 +7,7 @@ _So I dont forget_
 
 ### OR
 
-- Run `docker compose up` on `docker-compose.yml`
+- Run `docker-compose up` on `docker-compose.yml`
 - Use `Refresh all tags` API method to refresh all tags.
 - Query rest api.
 

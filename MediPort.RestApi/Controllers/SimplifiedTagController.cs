@@ -20,8 +20,8 @@ namespace MediPort.RestApi.Controllers
         public async Task<ActionResult<IEnumerable<SimplifiedTag>>> RefreshAllTags(string apiKey)
         {
             await _tagsStore.RefreshAllTags(apiKey);
-            
-            return NoContent();
+
+            return Ok("Tags have been refreshed successfully.");
         }
 
         [HttpGet("results")]

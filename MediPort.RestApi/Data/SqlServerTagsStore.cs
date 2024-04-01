@@ -10,15 +10,35 @@ namespace MediPort.RestApi.Data
     {
         private readonly string _connectionString;
 
-        public SqlServerTagsStore(IConfiguration configuration)
+        public SqlServerTagsStore()
         {
-            var connectionString = configuration.GetConnectionString("MasterDb");
+            // lord save me for storing credintials here
+
+            var server = "ms-sql-server";
+            var database = "master";
+            var port = "1433";
+            var user = "SA";
+            var password = "Password1234";
+
+            var connectionString = $"Server={server},{port};Initial Catalog={database};User ID={user};Password={password};Trust Server Certificate=True";
 
             if (connectionString == null)
             {
                 throw new ArgumentNullException(nameof(connectionString));
             }
-          
+
+            using var connection = new SqlConnection(connectionString);
+            connection.Open();
+
+            var tableExistsCommand = new TagTableExistsCommand(connection);
+            var tableExists = tableExistsCommand.Execute();
+
+            if (!tableExists)
+            {
+                var createTableCommand = new CreateTagsTableCommand(connection);
+                createTableCommand.Execute();
+            }
+
             _connectionString = connectionString;
         }
 

@@ -12,6 +12,8 @@ COPY MediPort.Api.Tests ./MediPort.Api.Tests/
 RUN dotnet restore
 
 # Publish the application
+RUN dotnet dev-certs https
+RUN dotnet dev-certs https --trust
 RUN dotnet publish MediPort.RestApi/MediPort.RestApi.csproj -c Release -o /app/MediPort.RestApi/out
 
 # Use a smaller runtime image for the final stage

@@ -1,5 +1,4 @@
-﻿using Azure;
-using MediPort.RestApi.Data;
+﻿using MediPort.RestApi.Data;
 using MediPortApi.HttpProcessing;
 using MediPortApi.TagProcessing;
 using Microsoft.AspNetCore.Mvc;

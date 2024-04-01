@@ -10,6 +10,8 @@ _So I dont forget_
 - Run `docker-compose up` on `docker-compose.yml`
 - Use `Refresh all tags` API method to refresh all tags.
 - Query rest api.
+------------------------------------------------------------------------------------
+Use: `http://localhost:8080/swagger/index.html` to visualize API resources.
 
 ## Media
 ![obraz](https://github.com/SebastianDrela2/StackOverFlowTagFetch/assets/107455395/a7893b15-0592-4163-b6a3-842b2a0f65aa)

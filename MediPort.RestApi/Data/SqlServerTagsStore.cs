@@ -27,7 +27,7 @@ namespace MediPort.RestApi.Data
             await using var connection = new SqlConnection(_connectionString);
             connection.Open();
 
-            var stackOverflowService = new StackOverflowService(connection, apiKey, 1000, null);
+            var stackOverflowService = new StackOverflowService(connection, apiKey, 1000, default);
             await stackOverflowService.ResetTagsAsync();         
         }
 

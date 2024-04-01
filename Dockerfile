@@ -18,6 +18,8 @@ RUN dotnet publish MediPort.RestApi/MediPort.RestApi.csproj -c Release -o /app/M
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app
 
+EXPOSE 8080
+
 # Copy the published output from the build stage to the final stage
 COPY --from=build /app/MediPort.RestApi/out ./
 

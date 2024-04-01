@@ -17,7 +17,7 @@ namespace MediPort.RestApi.Data
         {
             // lord save me for storing credintials here
 
-            var server = "localhost";
+            var server = "ms-sql-server";
             var database = "master";
             var port = "1433";
             var user = "SA";

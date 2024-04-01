@@ -1,5 +1,8 @@
 ﻿# Use the .NET SDK image to build the project
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+
+ENV ASPNETCORE_ENVIRONMENT=Development 
+
 WORKDIR /app
 
 # Copy the solution file and restore dependencies
@@ -26,4 +29,4 @@ EXPOSE 8080
 COPY --from=build /app/MediPort.RestApi/out ./
 
 # Set the entry point for the container
-ENTRYPOINT ["dotnet", "MediPort.RestApi.dll"]
+ENTRYPOINT ["dotnet", "MediPort.RestApi.dll", "--environment=Development"]

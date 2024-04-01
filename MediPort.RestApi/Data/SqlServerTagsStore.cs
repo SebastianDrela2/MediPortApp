@@ -21,7 +21,16 @@ namespace MediPort.RestApi.Data
           
             _connectionString = connectionString;
         }
-        
+
+        public async Task RefreshAllTags(string apiKey)
+        {
+            await using var connection = new SqlConnection(_connectionString);
+            connection.Open();
+
+            var stackOverflowService = new StackOverflowService(connection, apiKey, 1000, null);
+            await stackOverflowService.ResetTagsAsync();         
+        }
+
         public async Task<IEnumerable<SimplifiedTag>> GetAllTags()
         {
             await using var connection = new SqlConnection(_connectionString);
@@ -84,6 +93,6 @@ namespace MediPort.RestApi.Data
             var deleteTagsCommand = new DeleteTagsTableCommand(connection);
             deleteTagsCommand.Execute(id);
 
-        }
+        }       
     }
 }

@@ -15,7 +15,21 @@ namespace MediPort.RestApi.Controllers
         public SimplifiedTagController(ITagsStore tagsStore)
         {
             _tagsStore = tagsStore;
-        }   
+        }
+
+        [HttpGet("results/{apiKey}")]
+        public async Task<ActionResult<IEnumerable<SimplifiedTag>>> RefreshAllTags(string apiKey)
+        {
+            await _tagsStore.RefreshAllTags(apiKey);
+            var refreshedSimplifedTags = await GetAllSimplifiedTags();
+
+            if (refreshedSimplifedTags.Result is OkObjectResult okObjectResult)
+            {
+                return Ok(okObjectResult.Value);
+            }
+
+            return NoContent();
+        }
         
         [HttpGet]
         public async Task<ActionResult <IEnumerable<SimplifiedTag>>> GetAllSimplifiedTags()

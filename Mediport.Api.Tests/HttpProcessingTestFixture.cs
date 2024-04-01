@@ -21,7 +21,7 @@ namespace Mediport.Api.Tests
         [Test]
         public async Task TagsGetFetchedWith1000OrMoreResultsForValidApiKey()
         {
-            var apiKey = DecodeEncryptedApiKey();
+            var apiKey = DecodeEncodedApiKey();
             var logger = Substitute.For<Serilog.ILogger>();
 
             var stackOverflowService = new StackOverflowService(null, apiKey, 1000, logger);
@@ -33,10 +33,10 @@ namespace Mediport.Api.Tests
 
         // In actual production this would be replaced with either AES or RSA encryption.
         // Or we would get key from development database.
-        private string DecodeEncryptedApiKey()
+        private string DecodeEncodedApiKey()
         {
-            var encryptedKey = ReadResource("Mediport.Api.Tests.encryptedApiKey.txt");
-            var base64EncodedBytes = Convert.FromBase64String(encryptedKey);
+            var encodedKey = ReadResource("MediPort.Api.Tests.encryptedApiKey.txt");
+            var base64EncodedBytes = Convert.FromBase64String(encodedKey);
 
             return System.Text.Encoding.UTF8.GetString(base64EncodedBytes);           
         }

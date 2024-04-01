@@ -30,5 +30,18 @@ namespace Mediport.Api.Tests
 
             Assert.That(simplifiedTags.First().Percentage, Is.EqualTo(expected));
         }
+
+        [TestCase(SortOption.CountAscending, 0)]
+        [TestCase(SortOption.CountDescending, 10)]
+        public void SimplifiedTagsAreCorrectlySortedByCount(SortOption sortOption, int expected)
+        {
+            var limiter = 10;
+            var mockTagData = new MockTagData(limiter).GetMockTagsData();
+
+            var calculator = new SimplifiedTagCalculator(mockTagData.Tags);
+            var simplifiedTags = calculator.GetSortedSimplifiedTags(sortOption);
+
+            Assert.That(simplifiedTags.First().Count, Is.EqualTo(expected));
+        }
     }
 }

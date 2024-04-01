@@ -16,46 +16,24 @@ info:
   description: API for managing simplified tags
   version: 1.0.0
 servers:
-  - url: http://localhost:5000
+  - url: /api
 paths:
-  /api/tags/results/{apiKey}:
+  /tags/data/{apiKey}:
     get:
-      summary: Refresh All Tags
-      description: Refresh all tags using the provided API key
+      summary: Refresh all tags
       parameters:
         - in: path
           name: apiKey
           required: true
-          description: API key for authentication
           schema:
             type: string
       responses:
         '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/SimplifiedTag'
-        '204':
-          description: No Content
-  /api/tags:
-    get:
-      summary: Get All Simplified Tags
-      description: Retrieve all simplified tags
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/SimplifiedTag'
+          description: Tags have been refreshed successfully
+      security:
+        - ApiKeyAuth: []
     post:
-      summary: Create Simplified Tag
-      description: Create a new simplified tag
+      summary: Create a new tag
       requestBody:
         required: true
         content:
@@ -64,59 +42,94 @@ paths:
               $ref: '#/components/schemas/Tag'
       responses:
         '204':
-          description: No Content
-    /{id}:
-      get:
-        summary: Get Simplified Tag by ID
-        description: Retrieve a simplified tag by its ID
-        parameters:
-          - in: path
-            name: id
-            required: true
-            description: ID of the simplified tag to retrieve
-            schema:
-              type: integer
-        responses:
-          '200':
-            description: OK
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/SimplifiedTag'
-          '404':
-            description: Not Found
-      put:
-        summary: Update Simplified Tag
-        description: Update an existing simplified tag
-        parameters:
-          - in: path
-            name: id
-            required: true
-            description: ID of the simplified tag to update
-            schema:
-              type: integer
-        requestBody:
-          required: true
+          description: Tag created successfully
+      security:
+        - ApiKeyAuth: []
+  /tags/results:
+    get:
+      summary: Get sorted simplified tags
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            minimum: 1
+          description: Page number
+        - in: query
+          name: sort
+          schema:
+            type: string
+            enum: [nameascending, namedescending, percentageascending, percentagedescending, countascending, countdescending]
+          description: Sort option
+      responses:
+        '200':
+          description: List of sorted simplified tags
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Tag'
-        responses:
-          '204':
-            description: No Content
-      delete:
-        summary: Delete Simplified Tag
-        description: Delete a simplified tag
-        parameters:
-          - in: path
-            name: id
-            required: true
-            description: ID of the simplified tag to delete
+                type: array
+                items:
+                  $ref: '#/components/schemas/SimplifiedTag'
+      security:
+        - ApiKeyAuth: []
+  /tags/{id}:
+    get:
+      summary: Get simplified tag by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+          description: Tag ID
+      responses:
+        '200':
+          description: Simplified tag found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimplifiedTag'
+        '404':
+          description: Simplified tag not found
+      security:
+        - ApiKeyAuth: []
+    put:
+      summary: Update a simplified tag
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+          description: Tag ID
+      requestBody:
+        required: true
+        content:
+          application/json:
             schema:
-              type: integer
-        responses:
-          '204':
-            description: No Content
+              $ref: '#/components/schemas/Tag'
+      responses:
+        '204':
+          description: Tag updated successfully
+      security:
+        - ApiKeyAuth: []
+    delete:
+      summary: Delete a simplified tag
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+          description: Tag ID
+      responses:
+        '204':
+          description: Tag deleted successfully
+      security:
+        - ApiKeyAuth: []
 components:
   schemas:
     SimplifiedTag:
@@ -124,14 +137,13 @@ components:
       properties:
         id:
           type: integer
+          format: int64
         name:
           type: string
         percentage:
           type: number
-      required:
-        - id
-        - name
-        - percentage
+        count:
+          type: integer
     Tag:
       type: object
       properties:
@@ -139,7 +151,12 @@ components:
           type: string
         percentage:
           type: number
-      required:
-        - name
-        - percentage
+        count:
+          type: integer
+securitySchemes:
+  ApiKeyAuth:
+    type: apiKey
+    in: header
+    name: X-API-Key
+
 ```

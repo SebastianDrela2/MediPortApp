@@ -7,12 +7,11 @@ WORKDIR /app
 
 # Copy the solution file and restore dependencies
 COPY MediPort.sln .
-COPY MediPort.Console ./MediPort.Console/
 COPY MediPort.Api ./MediPort.Api/
 COPY MediPort.RestApi ./MediPort.RestApi/
-COPY MediPort.Api.Tests ./MediPort.Api.Tests/
 
-RUN dotnet restore
+RUN dotnet restore "MediPort.Api/MediPort.Api.csproj"
+RUN dotnet restore "MediPort.RestApi/MediPort.RestApi.csproj"
 
 # Publish the application
 RUN dotnet dev-certs https

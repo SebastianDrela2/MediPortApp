@@ -11,7 +11,7 @@ _So I dont forget_
 - Use `Refresh all tags` API method to refresh all tags.
 - Query rest api.
 ------------------------------------------------------------------------------------
-Use: `http://localhost:8080/swagger/index.html` to visualize API resources.
+Use: `https://localhost:8080/swagger/index.html` to visualize API resources.
 
 ## Media
 ![obraz](https://github.com/SebastianDrela2/StackOverFlowTagFetch/assets/107455395/b6f0aaa0-c39c-4cbd-9898-a8ffa433882d)

@@ -14,8 +14,7 @@ _So I dont forget_
 Use: `http://localhost:8080/swagger/index.html` to visualize API resources.
 
 ## Media
-![obraz](https://github.com/SebastianDrela2/StackOverFlowTagFetch/assets/107455395/a7893b15-0592-4163-b6a3-842b2a0f65aa)
-
+![obraz](https://github.com/SebastianDrela2/StackOverFlowTagFetch/assets/107455395/b6f0aaa0-c39c-4cbd-9898-a8ffa433882d)
 
 ### Open Api Doc
 ```

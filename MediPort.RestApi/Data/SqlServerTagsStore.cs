@@ -26,11 +26,6 @@ namespace MediPort.RestApi.Data
             var connectionString = 
                 $"Server={server},{port};Initial Catalog={database};User ID={user};Password={password};Trust Server Certificate=True";
 
-            if (connectionString == null)
-            {
-                throw new ArgumentNullException(nameof(connectionString));
-            }
-
             using var connection = new SqlConnection(connectionString);
             connection.Open();
 

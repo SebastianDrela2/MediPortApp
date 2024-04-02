@@ -16,7 +16,7 @@ namespace MediPort.RestApi.Controllers
             _tagsStore = tagsStore;
         }
 
-        [HttpGet("data/{apiKey}")]
+        [HttpPost("data/{apiKey}")]
         public async Task<ActionResult<IEnumerable<SimplifiedTag>>> RefreshAllTags(string apiKey)
         {
             await _tagsStore.RefreshAllTags(apiKey);

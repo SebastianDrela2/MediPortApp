@@ -8,7 +8,10 @@ namespace MediPort.RestApi
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-
+            builder.WebHost.ConfigureKestrel(options => options.ListenAnyIP(8080, listenOptions =>
+            {
+                listenOptions.UseHttps("certs/MediPort.RestApi.pfx", "Password1234");
+            }));
             // Add services to the container.
 
             builder.Services.AddControllers();

@@ -14,8 +14,7 @@ RUN dotnet restore "MediPort.Api/MediPort.Api.csproj"
 RUN dotnet restore "MediPort.RestApi/MediPort.RestApi.csproj"
 
 # Publish the application
-RUN dotnet dev-certs https
-RUN dotnet dev-certs https --trust
+
 RUN dotnet publish MediPort.RestApi/MediPort.RestApi.csproj -c Release -o /app/MediPort.RestApi/out
 
 # Use a smaller runtime image for the final stage
@@ -26,6 +25,12 @@ EXPOSE 8080
 
 # Copy the published output from the build stage to the final stage
 COPY --from=build /app/MediPort.RestApi/out ./
+
+# Copy Certificate
+RUN mkdir -p /app/certs
+COPY certs/MediPort.RestApi.pfx /app/certs/MediPort.RestApi.pfx
+
+RUN update-ca-certificates
 
 # Set the entry point for the container
 ENTRYPOINT ["dotnet", "MediPort.RestApi.dll", "--environment=Development"]

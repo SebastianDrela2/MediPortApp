@@ -75,6 +75,7 @@ namespace MediPortApi.HttpProcessing
             if (json is null)
             {
                 cancellationTokenSource.Cancel();
+                return;
             }
 
             var tagsDataReceived = JsonConvert.DeserializeObject<TagsData>(json)!;

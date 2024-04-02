@@ -12,7 +12,7 @@ namespace Mediport.Api.Tests
         public async Task TagsGetFetchedWithLessThan1000ResultsForInvalidApiKey()
         {           
             var logger = Substitute.For<Serilog.ILogger>();
-            var stackOverflowService = new StackOverflowService(null, "", 1000, logger);
+            var stackOverflowService = new StackOverflowService(null, "", 40, logger);
             var tagsData = await stackOverflowService.GetTagsDataAsync();
 
             Assert.That(tagsData.Tags.Count < 1000);
@@ -24,7 +24,7 @@ namespace Mediport.Api.Tests
             var apiKey = DecodeEncodedApiKey();
             var logger = Substitute.For<Serilog.ILogger>();
 
-            var stackOverflowService = new StackOverflowService(null, apiKey, 1000, logger);
+            var stackOverflowService = new StackOverflowService(null, apiKey, 40, logger);
             var tagsData = await stackOverflowService.GetTagsDataAsync();
 
             Assert.That(tagsData.Tags.Count >= 1000);

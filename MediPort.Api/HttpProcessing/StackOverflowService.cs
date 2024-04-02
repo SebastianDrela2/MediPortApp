@@ -1,8 +1,10 @@
-﻿using MediPortApi.SqlCommands;
+﻿using Azure;
+using MediPortApi.SqlCommands;
 using Microsoft.Data.SqlClient;
 using Newtonsoft.Json;
 using Serilog;
 using System.IO.Compression;
+using System.Threading;
 
 namespace MediPortApi.HttpProcessing
 {
@@ -12,14 +14,14 @@ namespace MediPortApi.HttpProcessing
 
         private readonly SqlConnection _connection;
         private readonly string _apiKey;
-        private readonly int _tagLimit;
+        private readonly int _pages;
         private readonly ILogger _logger;
 
-        public StackOverflowService(SqlConnection connection, string apiKey, int tagLimit, ILogger logger)
+        public StackOverflowService(SqlConnection connection, string apiKey, int pages, ILogger logger)
         {
             _connection = connection;
             _apiKey = apiKey;
-            _tagLimit = tagLimit;
+            _pages = pages;
             _logger = logger;
         }
 
@@ -37,29 +39,56 @@ namespace MediPortApi.HttpProcessing
         public async Task<TagsData> GetTagsDataAsync()
         {
             var page = 1;
-            var tagsData = new TagsData();
-            
-            while (tagsData.Tags.Count <= _tagLimit)
-            {                
-                var json = await GetJson(page);
+            var maxConcurrentTasks = 20;
 
-                if (json is not null)
+            var tasks = new List<Task>();
+            var semaphore = new SemaphoreSlim(maxConcurrentTasks);
+
+            var cancellationTokenSource = new CancellationTokenSource();
+            var cancellationToken = cancellationTokenSource.Token;
+
+            var tagsData = new TagsData();
+            try
+            {
+                while (page <= _pages)
                 {
-                    var tagsDataReceived = JsonConvert.DeserializeObject<TagsData>(json)!;
-                    tagsData.Tags.AddRange(tagsDataReceived.Tags);                                    
-                    page++;                   
+                    cancellationToken.ThrowIfCancellationRequested();
+
+                    tasks.Add(AppendTags(semaphore, tagsData, cancellationTokenSource, page));
+                    page++;
                 }
-                else
-                {                   
-                    break;                    
-                }
+
+                await Task.WhenAll(tasks);
             }
-            
+            catch(OperationCanceledException)
+            {
+                // return current
+            }
+
             return tagsData;
         }
 
-        private async Task<string?> GetJson(int page)
+        private async Task AppendTags(SemaphoreSlim semaphore, TagsData tagsData, CancellationTokenSource cancellationTokenSource, int page)
         {
+            var json = await GetTagsJson(semaphore, page);
+
+            if (json is null)
+            {
+                cancellationTokenSource.Cancel();
+            }
+
+            var tagsDataReceived = JsonConvert.DeserializeObject<TagsData>(json)!;
+
+            foreach(var tag in tagsDataReceived.Tags)
+            {
+                tagsData.Tags.Add(tag);
+            }                      
+        }
+
+        private async Task<string?> GetTagsJson(SemaphoreSlim semaphore, int page)
+        {
+            await semaphore.WaitAsync();
+
             using var httpClient = new HttpClient();
 
             var currentPageLink = $"{HttpTagFetchLink}&page={page}&key={_apiKey}";
@@ -83,6 +112,10 @@ namespace MediPortApi.HttpProcessing
             {
                 _logger.Error($"Http request failed. {ex.Message}");
                 return null;
+            }
+            finally
+            {
+                semaphore.Release();
             }
 
             _logger.Error($"Page {page} did not get fetched, Most likely provided apikey is invalid or oudated.");

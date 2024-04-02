@@ -21,7 +21,7 @@ namespace MediPort.Console
 
             using var connection = SqlConnectionFactory.GetSqlConnection(settings);
 
-            var stackOverflowService = new StackOverflowService(connection, settings.StackOverFlowApiKey, 1000, logger);
+            var stackOverflowService = new StackOverflowService(connection, settings.StackOverFlowApiKey, 40, logger);
             var tagsData = await stackOverflowService.GetTagsDataAsync();            
 
             OpenSqlConnection(connection, logger);

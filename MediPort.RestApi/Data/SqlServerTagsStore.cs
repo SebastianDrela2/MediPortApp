@@ -4,7 +4,6 @@ using MediPortApi.Logging;
 using MediPortApi.SqlCommands;
 using MediPortApi.TagProcessing;
 using Microsoft.Data.SqlClient;
-using Serilog;
 
 namespace MediPort.RestApi.Data
 {

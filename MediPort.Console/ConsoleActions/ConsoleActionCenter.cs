@@ -1,5 +1,4 @@
 ﻿using MediPortApi.HttpProcessing;
-using MediPortApi.SqlCommands;
 using MediPortApi.TagProcessing;
 using Microsoft.Data.SqlClient;
 

@@ -27,12 +27,10 @@ namespace MediPort.Console
             OpenSqlConnection(connection, logger);
             PopulateTagsTable(connection, tagsData);
 
-            var consoleActionCenter = new ConsoleActionCenter(connection, tagsData, stackOverflowService);
+            var consoleActionCenter = new ConsoleActionCenter(tagsData, stackOverflowService);
             consoleActionCenter.RenderActionList();
 
-            RenderAndExecuteActions(consoleActionCenter);
-
-            connection.Close();
+            RenderAndExecuteActions(consoleActionCenter);         
         }
 
         private static void CreateSettingsDirectory()

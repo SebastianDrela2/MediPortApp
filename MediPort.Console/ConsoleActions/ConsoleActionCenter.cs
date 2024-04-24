@@ -1,20 +1,17 @@
 ﻿using MediPortApi.HttpProcessing;
 using MediPortApi.TagProcessing;
-using Microsoft.Data.SqlClient;
 
 namespace MediPortApi.ConsoleActions
 {
     public class ConsoleActionCenter
     {                       
         private readonly StackOverflowService _stackOverflowService;
-        private readonly Dictionary<int, Func<Task>> _actions;
-        private readonly SqlConnection _connection;
+        private readonly Dictionary<int, Func<Task>> _actions;     
 
         private DisplaySortedTagsAction _displayAction;      
 
-        public ConsoleActionCenter(SqlConnection connection, TagsData tagsData, StackOverflowService stackOverflowService)
-        {
-            _connection = connection;
+        public ConsoleActionCenter(TagsData tagsData, StackOverflowService stackOverflowService)
+        {         
             _stackOverflowService = stackOverflowService;
 
             SetDisplayAction(tagsData);          

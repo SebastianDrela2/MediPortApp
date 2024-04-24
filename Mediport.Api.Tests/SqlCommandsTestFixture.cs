@@ -1,5 +1,4 @@
-﻿using MediPortApi.HttpProcessing;
-using MediPortApi.SqlCommands;
+﻿using MediPortApi.SqlCommands;
 using Microsoft.Data.SqlClient;
 
 namespace Mediport.Api.Tests

@@ -1,10 +1,8 @@
-﻿using Azure;
-using MediPortApi.SqlCommands;
+﻿using MediPortApi.SqlCommands;
 using Microsoft.Data.SqlClient;
 using Newtonsoft.Json;
 using Serilog;
 using System.IO.Compression;
-using System.Threading;
 
 namespace MediPortApi.HttpProcessing
 {
